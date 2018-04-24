@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,16 +20,36 @@ namespace WPFTutorial
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
         public Calculator cal;
+        private string display;
+        public string Display
+        {
+            get { return display; }
+            set {
+                if (value != display)
+                {
+                    display = value;
+                    OnPropertyChanged("Display");
+                } }
+        }
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
-            
+            Result.DataContext = this;
             cal = new Calculator();
-            Result.Text = cal.GetCurrentNumber();
+            
+            Display = cal.GetCurrentNumber();
             //MainGrid.MouseUp += new MouseButtonEventHandler(MainGrid_MouseUp);
         }
 
@@ -36,7 +57,7 @@ namespace WPFTutorial
         {
             string button = (e.Source as Button).Content.ToString();
             cal.NumberInput(button);
-            Result.Text = cal.GetCurrentNumber();
+            Display = cal.GetCurrentNumber();
             
         }
 
@@ -44,13 +65,13 @@ namespace WPFTutorial
         {
             string button = (e.Source as Button).Content.ToString();
             cal.Calculate(button);
-            Result.Text = cal.GetCurrentNumber();    
+            Display = cal.GetCurrentNumber();    
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             cal.Clear();
-            Result.Text = cal.GetCurrentNumber();
+            Display = cal.GetCurrentNumber();
         }
     }
 }

@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <StackPanel Name="panel" Margin="15">
-        <TextBox HorizontalContentAlignment="Right" Name="Result" IsReadOnly="True" ></TextBox>
+        
+        <TextBox HorizontalContentAlignment="Right" Name="Result" IsReadOnly="True" Text="{Binding Path=Display}"></TextBox>
         <Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
